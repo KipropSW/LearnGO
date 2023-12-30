@@ -36,7 +36,7 @@ func main() {
 
 	reqBody := &cli.RequestBody{
 		SourceLang: sourceLang,
-		TargetLang: target,
+		TargetLang: targetLang,
 		SourceText: sourceText,
 	}
 
