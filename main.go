@@ -1,0 +1,50 @@
+package main
+
+import (
+	"cli"
+	"flag"
+	"fmt"
+	"os"
+	"strings"
+	"sync"
+)
+
+var wg sync.WaitGroup
+
+var sourceLang string
+var targetLang string
+var sourceText string
+
+func init() {
+
+	flag.StringVar(&sourceLang, "s", "en", "Source languge[en]")
+	flag.StringVar(&targetLang, "t", "fr", "Target languge[fr]")
+	flag.StringVar(&sourceText, "st", "", "Text to Translate")
+}
+
+func main() {
+	flag.Parse()
+	if flag.NFlag() == 0 {
+		fmt.Println("Options: ")
+		flag.PrintDefaults()
+		os.Exit(1)
+	}
+
+	strChan := make(chan string)
+
+	wg.Add(1)
+
+	reqBody := &cli.RequestBody{
+		SourceLang: sourceLang,
+		TargetLang: target,
+		SourceText: sourceText,
+	}
+
+	go cli.RequestTranslate(reqBody, strChan, &wg)
+
+	processedStr := strings.ReplaceAll(<-strChan, "+", " ")
+	fmt.Printf("%s\n", processedStr)
+
+	wg.Wait()
+
+}
