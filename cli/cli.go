@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/jeffail/gabs"
+	"github.com/Jeffail/gabs"
 )
 
 type RequestBody struct {
@@ -36,7 +36,7 @@ func RequestTranslate(body *RequestBody, str chan string, wg *sync.WaitGroup) {
 	res, err := client.Do(req)
 
 	if err != nil {
-		log.Fatal("2. There was a problem:%s", err)
+		log.Fatalf("2. There was a problem: %s", err)
 	}
 
 	defer res.Body.Close()
@@ -49,22 +49,23 @@ func RequestTranslate(body *RequestBody, str chan string, wg *sync.WaitGroup) {
 	parsedJson, err := gabs.ParseJSONBuffer(res.Body)
 
 	if err != nil {
-		log.Fatal("3. There was a problem:%s", err)
+		log.Fatalf("3. There was a problem: %s", err)
 	}
+
 	nestOne, err := parsedJson.ArrayElement(0)
 	if err != nil {
-		log.Fatal("4. There was a problem:%s", err)
+		log.Fatalf("4. There was a problem: %s", err)
 	}
-	nestTwo, err := nestOne.ArrayElement
+	nestTwo, err := nestOne.ArrayElement(0)
 
 	if err != nil {
-		log.Fatal("5. There was a problem:%s", err)
+		log.Fatalf("5. There was a problem: %s", err)
 	}
 
 	translatedStr, err := nestTwo.ArrayElement(0)
 
 	if err != nil {
-		log.Fatal("6. There was a problem:%s", err)
+		log.Fatalf("6. There was a problem: %s", err)
 	}
 
 	str <- translatedStr.Data().(string)

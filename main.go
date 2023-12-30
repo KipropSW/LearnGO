@@ -1,9 +1,9 @@
 package main
 
 import (
-	"cli"
 	"flag"
 	"fmt"
+	"google-translate/cli"
 	"os"
 	"strings"
 	"sync"
